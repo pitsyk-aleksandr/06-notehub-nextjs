@@ -77,12 +77,15 @@ const NotesClient = () => {
 
   // ---------------------------------------------------------------------------------------------
   // Оголошуємо і типизуємо стан - рядок з пошуком
-  const [query, setQuery] = useState<string>(() => {
-    // Отримуємо з localStorage збережений рядок запиту,
-    // а якщо його немає, то встановлюємо початкове значення як порожній рядок
-    const savedQuery = localStorage.getItem('query');
-    return savedQuery ? JSON.parse(savedQuery) : '';
-  });
+  const [query, setQuery] = useState<string>('');
+  // *************************************************************
+  // const [query, setQuery] = useState<string>(() => {
+  //   // Отримуємо з localStorage збережений рядок запиту,
+  //   // а якщо його немає, то встановлюємо початкове значення як порожній рядок
+  //   const savedQuery = localStorage.getItem('query');
+  //   return savedQuery ? JSON.parse(savedQuery) : '';
+  // });
+  // *************************************************************
   // Оголошуємо і типизуємо стан - номер поточної сторінки
   const [page, setPage] = useState<number>(1);
   // Оголошуємо і типизуємо стан - чи відкрите модальне вікно
@@ -164,7 +167,9 @@ const NotesClient = () => {
   // Використовуємо useEffect для відстеження змін в даних
   useEffect(() => {
     // Зберігаємо рядок запиту в localStorage при кожній його зміні
-    localStorage.setItem('query', JSON.stringify(query));
+    // *************************************************************
+    // localStorage.setItem('query', JSON.stringify(query));
+    // *************************************************************
   }, [query]);
   // ---------------------------------------------------------------------------------------------
 

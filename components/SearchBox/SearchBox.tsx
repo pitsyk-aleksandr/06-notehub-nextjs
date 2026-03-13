@@ -25,8 +25,10 @@ export default function SearchBox({ onChangeText }: SearchBoxProps) {
   useEffect(() => {
     // Отримуємо з localStorage збережений рядок пошуку,
     // а якщо його немає, то встановлюємо початкове значення як порожній рядок
-    const savedSearchText = localStorage.getItem('searchText');
-    setSearchText(savedSearchText ? JSON.parse(savedSearchText) : '');
+    // *************************************************************
+    // const savedSearchText = localStorage.getItem('searchText');
+    // setSearchText(savedSearchText ? JSON.parse(savedSearchText) : '');
+    // *************************************************************
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +45,9 @@ export default function SearchBox({ onChangeText }: SearchBoxProps) {
 
     // Оновлення стану та збереження в localStorage
     setSearchText(text);
-    localStorage.setItem('searchText', JSON.stringify(text));
+    // *************************************************************
+    // localStorage.setItem('searchText', JSON.stringify(text));
+    // *************************************************************
     // Виклик функції onChangeText з поточним текстом пошуку
     onChangeText(text);
   };
