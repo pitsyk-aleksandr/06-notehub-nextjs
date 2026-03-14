@@ -5,9 +5,11 @@
 // Імпорт модуля зі стилями компонента
 import css from './NoteForm.module.css';
 
+import { useState } from 'react';
+
 // Імпорт компонентів Formik, Form, Field, ErrorMessage для роботи з формами
 // (Додатково - npm install formik)
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
 import type { FormikHelpers } from 'formik/dist/types';
 
 // Імпортуємо бібліотеку валідації в компонент форми
@@ -48,6 +50,9 @@ const initialValuesForm: NoteFormValues = {
 
 // Компонент NoteForm
 export default function NoteForm({ onClose, currentQuery }: NoteFormProps) {
+  // Змінна для відстеження стану відправки форми (можна використовувати FormikState для цього)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Ініціалізація змінної queryClient для роботи з кешем React Query
   const queryClient = useQueryClient();
 
@@ -71,12 +76,13 @@ export default function NoteForm({ onClose, currentQuery }: NoteFormProps) {
   // ---------------------------------------------------------------------------------------------
   // Функція обробки відправки форми, яка приймає значення форми та допоміжні функції Formik
   const handleSubmit = (values: NoteFormValues, actions: FormikHelpers<NoteFormValues>) => {
+    // Встановлюємо стан isSubmitting в true, щоб заблокувати кнопку відправки форми під час виконання операції
+    setIsSubmitting(true);
+
     // Виклик функції taskCreate з поточними значеннями форми - створення нотатки
     taskCreate(values);
     // Скидаємо форму до початкових значень
-    actions.resetForm();
-    // Закриваємо модальне вікно після створення нотатки
-    // onClose();
+    // actions.resetForm();
   };
   // ---------------------------------------------------------------------------------------------
 
@@ -97,7 +103,7 @@ export default function NoteForm({ onClose, currentQuery }: NoteFormProps) {
       // що змусить React Query повторно виконати ці запити і отримати оновлені дані з сервера.
       queryClient.invalidateQueries({ queryKey: ['notes', currentQuery, 1] });
     },
-    onError: error => {
+    onError: (error: Error) => {
       // An error
       toast.error(`Created ERROR ${error.message}`);
     },
@@ -160,7 +166,7 @@ export default function NoteForm({ onClose, currentQuery }: NoteFormProps) {
             Cancel
           </button>
 
-          <button type="submit" className={css.submitButton} disabled={false}>
+          <button type="submit" className={css.submitButton} disabled={isSubmitting}>
             Create note
           </button>
         </div>
